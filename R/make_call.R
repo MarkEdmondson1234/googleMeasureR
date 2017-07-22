@@ -51,7 +51,7 @@ gmr_post <- function(payload_data,
   payload_data <- lapply(payload_data,
                          function(x) utils::URLencode(as.character(x), reserved = TRUE))
 
-  debug <- getOption("googleMeasureR.debug")
+  debug <- getOption("googleMeasureR.debug", default = FALSE)
 
   if(debug){
     message("Debug mode")

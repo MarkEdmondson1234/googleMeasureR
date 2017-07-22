@@ -1,53 +1,82 @@
 #' Post data to Measurement Protocol
 #'
-#' @param payload_data A named list of paramters to send.  Some defaults are set, see details.
-#' @param endpoint where to send the API hits
-#' @param user_agent Is a formatted user agent string that is used to compute the following dimensions: browser, platform, and mobile capabilities.
+#' Send data to the Google Analytics API endpoint.
+#'
+#' @param payload_data A named list of paramters to send.
+#' @param tid Tracking ID.  By default from the Sys environment \code{MP_TRACKING_ID}, overwritten if tid also sent in \code{payload_data}
+#' @param hittype Either specify in argument \code{payload_data$t} or here.
 #'
 #' @details
-#' Hits are sent via \code{httr::POST}
+#' Hits are sent via \code{httr::POST} and are URL encoded.
 #'
 #' The version argument is set for you:  \code{v=1L}
 #'
 #' \code{ip} is implicitly sent in the HTTP request and is used to compute all the geo / network dimensions in Google Analytics.  Override with \code{payload_data$uip = 1.2.3.4}
 #'
-#' The user_agent is that which is sent with the request.  You can override this for the measurement itself via \code{payload_data$ua = Opera%2F9.80%20%28Windows%20NT%206.0}
+#' Set options("googleMeasureR.debug" = TRUE) to activate debug mode.
 #'
-#' @return A httr request object
+#'
+#' @return TRUE if successful
 #'
 #' @seealso \url{https://developers.google.com/analytics/devguides/collection/protocol/v1/}
 #' @export
 gmr_post <- function(payload_data,
-                     endpoint = c("collect","batch"),
-                     user_agent = httr::user_agent(paste0("googleMeasureR/",
-                                                          packageVersion("googleMeasureR")))){
-
-  endpoint <- match.arg(endpoint)
-
-  payload_data$v <- 1L
+                     tid = Sys.getenv("MP_TRACKING_ID"),
+                     hittype = c("pageview",
+                                 "screenview",
+                                 "event",
+                                 "transaction",
+                                 "item",
+                                 "social",
+                                 "exception",
+                                 "timing")){
+  hittype <- match.arg(hittype)
 
   assertthat::assert_that(
     is.list(payload_data),
-    !is.null(payload_data$tid),
-    !is.null(payload_data$v),
-    !is.null(payload_data$t),
-    !is.null(payload_data$cid)
+    assertthat::is.string(tid)
   )
+
+  payload_data$v <- 1L
+
+  if(is.null(payload_data[["tid"]])){
+    payload_data[["tid"]] <- tid
+  }
+
+  if(is.null(payload_data[["t"]])){
+    payload_data[["t"]] <- hittype
+  }
 
   ## encode payload_data
-  payload_data <- lapply(payload_data, function(x) utils::URLencode(as.character(x), reserved = TRUE))
+  payload_data <- lapply(payload_data,
+                         function(x) utils::URLencode(as.character(x), reserved = TRUE))
 
-  req <- httr::POST(
-    sprintf("https://www.google-analytics.com/%s", endpoint),
-    body = payload_data,
-    encode = "form",
-    user_agent
-  )
+  debug <- getOption("googleMeasureR.debug")
+
+  if(debug){
+    message("Debug mode")
+    str(payload_data)
+    req <- httr::POST(
+      "https://www.google-analytics.com/debug/collect",
+      body = rmNullObs(payload_data),
+      encode = "form",
+      httr::verbose()
+    )
+    return(jsonlite::fromJSON(httr::content(req, as = "text")))
+  } else {
+    req <- httr::POST(
+      "https://www.google-analytics.com/collect",
+      body = rmNullObs(payload_data),
+      encode = "form"
+    )
+  }
+
+
 
   if(req$status_code != 200L){
     stop("Error making request")
   }
 
-  req
+  TRUE
 
 }

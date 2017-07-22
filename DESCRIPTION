@@ -15,7 +15,8 @@ Depends:
 Imports:
     assertthat (>= 0.2.0),
     httr (>= 1.1.0),
-    utils
+    utils,
+    uuid
 Suggests:
     covr,
     digest,

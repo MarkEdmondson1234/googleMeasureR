@@ -4,7 +4,8 @@
 \alias{gmr_hit_page}
 \title{Send a page type hit}
 \usage{
-gmr_hit_page(url_path = NULL, url_host = NULL, url_title = NULL, ...)
+gmr_hit_page(url_path = NULL, url_host = NULL, url_title = NULL,
+  enhanced_ecom = NULL, ...)
 }
 \arguments{
 \item{url_path}{The path portion of the page URL, should start with \code{/}}
@@ -12,6 +13,8 @@ gmr_hit_page(url_path = NULL, url_host = NULL, url_title = NULL, ...)
 \item{url_host}{Specifies the hostname from which content was hosted}
 
 \item{url_title}{The title of the page or document.}
+
+\item{enhanced_ecom}{A \code{gmr_ee} generated via \link{gmr_enhanced_ecom}}
 
 \item{...}{Other named arguments to pass in as payload data}
 }

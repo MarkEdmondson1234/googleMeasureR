@@ -5,7 +5,7 @@
 \title{Send a event type hit}
 \usage{
 gmr_hit_event(category, action, label = NULL, value = NULL,
-  interaction = TRUE, ...)
+  interaction = TRUE, enhanced_ecom = NULL, ...)
 }
 \arguments{
 \item{category}{Specifies the event category}
@@ -17,6 +17,8 @@ gmr_hit_event(category, action, label = NULL, value = NULL,
 \item{value}{Optional value}
 
 \item{interaction}{Whether hit is interactive with page (affecting bounce rate)}
+
+\item{enhanced_ecom}{A \code{gmr_ee} generated via \link{gmr_enhanced_ecom}}
 
 \item{...}{Other named arguments to pass in as payload data}
 }

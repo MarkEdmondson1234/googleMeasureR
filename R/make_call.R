@@ -59,8 +59,7 @@ gmr_post <- function(payload_data,
     req <- httr::POST(
       "https://www.google-analytics.com/debug/collect",
       body = rmNullObs(payload_data),
-      encode = "form",
-      httr::verbose()
+      encode = "form"
     )
     return(jsonlite::fromJSON(httr::content(req, as = "text")))
   } else {

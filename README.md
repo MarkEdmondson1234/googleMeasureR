@@ -26,7 +26,7 @@ gmr_post(list(t=2, tid = "UA-XXXXX-Y", cid = 1234567L))
 
 ## Default Google Analytics Web property
 
-you can set the default web analytics property by setting an environment variable:
+You can set the default web analytics property by setting an environment variable:
 
 In the `.Renviron` file set `MP_TRACKING_ID="UA-123455-1"`
 
@@ -39,7 +39,7 @@ So far they are:
 *Page type*
 
 ```r
-gmr_hit_page("/hi-from-r-test", dp = "/bye-from-r-test")
+gmr_hit_page("/hi-from-r-test")
 ```
 
 *Events*
@@ -66,7 +66,7 @@ By default each hit has a new cookie ID (e.g. a new user) - you may want to asso
 
 ### Enhanced Ecommerce
 
-There are some helpers to add enchanced ecommerce arguments. An example is shown below:
+There are some helpers to add enhanced ecommerce arguments. An example is shown below:
 
 ```r
 ## send an enhanced ecommerce hit

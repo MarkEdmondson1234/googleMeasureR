@@ -24,6 +24,14 @@ Then send them via `gmr_post` - a minimal example is below:
 gmr_post(list(t=2, tid = "UA-XXXXX-Y", cid = 1234567L))
 ```
 
+You will need to set a valid browser header (parameter `ua`) if your view has "Block bots" tickbox checked on to see hits.  Keep the checkbox ticked off for all hits to be seen in your GA account. 
+
+An example of a valid header hit is:
+
+```r
+gmr_hit_page("home", ua="Opera%2F9.80%20%28Windows%20NT%206.0%29%20Presto%2F2.12.388%20Version%2F12.14")
+```
+
 ## Default Google Analytics Web property
 
 You can set the default web analytics property by setting an environment variable:

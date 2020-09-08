@@ -66,7 +66,8 @@ gmr_post <- function(payload_data,
     req <- httr::POST(
       "https://www.google-analytics.com/collect",
       body = rmNullObs(payload_data),
-      encode = "form"
+      encode = "form",
+      add_headers("User-Agent" = "My User Agent 1.1")
     )
   }
 
